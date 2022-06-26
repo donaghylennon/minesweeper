@@ -15,17 +15,23 @@ struct Size(usize, usize);
 #[derive(Debug)]
 struct Field {
     size: Size,
-    bombs: Box<[bool]>,
+    bombs: HashSet<(usize, usize)>,
     clicked: HashSet<(usize, usize)>
 }
 
 impl Field {
     fn new() -> Self {
         let size = Size(20, 20);
-        let mut bombs: Box<[bool; 400]> = Box::new([false; 400]);
+        let mut bombs = HashSet::new();
         let mut rng = rand::thread_rng();
         let clicked = HashSet::new();
-        bombs.fill_with(|| rng.gen_bool(0.1));
+        for i in 0..size.0 {
+            for j in 0..size.1 {
+                if rng.gen_bool(0.1) {
+                    bombs.insert((i, j));
+                }
+            }
+        }
         Field {
             size,
             bombs,
@@ -34,13 +40,13 @@ impl Field {
     }
 
     fn bomb_at(&self, x: usize, y: usize) -> bool {
-        self.bombs[y*self.size.0 + x]
+        self.bombs.contains(&(x, y))
     }
 
     fn num_surrounding_bombs(&self, x: usize, y: usize) -> u32 {
         let mut count = 0;
         for pos in self.surrounding_positions(x, y) {
-            if self.bombs[pos.1*self.size.0 + pos.0] {
+            if self.bombs.contains(&(pos.0, pos.1)) {
                 count += 1;
             }
         }
