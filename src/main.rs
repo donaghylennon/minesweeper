@@ -159,26 +159,19 @@ fn main() {
                             canvas.copy(&t_mine, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
                                 .expect("Failed to copy to canvas");
                         } else {
-                            match field.num_surrounding_bombs(i, j) {
-                                1 => canvas.copy(&t_one, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                2 => canvas.copy(&t_two, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                3 => canvas.copy(&t_three, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                4 => canvas.copy(&t_four, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                5 => canvas.copy(&t_five, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                6 => canvas.copy(&t_six, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                7 => canvas.copy(&t_seven, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                8 => canvas.copy(&t_eight, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas"),
-                                _ => canvas.copy(&t_empty, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
-                                    .expect("Failed to copy to canvas")
-                            }
+                            let tex = match field.num_surrounding_bombs(i, j) {
+                                1 => &t_one,
+                                2 => &t_two,
+                                3 => &t_three,
+                                4 => &t_four,
+                                5 => &t_five,
+                                6 => &t_six,
+                                7 => &t_seven,
+                                8 => &t_eight,
+                                _ => &t_empty,
+                            };
+                            canvas.copy(tex, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
+                                .expect("Failed to copy to canvas");
                         }
                     } else {
                         canvas.copy(&t_square, None, Rect::new(32*i as i32, 32*j as i32, 32, 32))
